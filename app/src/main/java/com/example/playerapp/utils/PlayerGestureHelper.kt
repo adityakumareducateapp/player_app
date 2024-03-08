@@ -92,7 +92,6 @@ class PlayerGestureHelper(
         }
     )
 
-
     private val volumeAndBrightnessGestureDetector = GestureDetector(
         playerView.context,
         object : GestureDetector.SimpleOnGestureListener() {
@@ -116,17 +115,13 @@ class PlayerGestureHelper(
                 val distanceFull = playerView.measuredHeight * FULL_SWIPE_RANGE_SCREEN_RATIO
                 val ratioChange = distanceY / distanceFull
 
-                val maxVolume = volumeManager.maxStreamVolume
-                val maxChange = maxVolume / 10 // Adjust this value for sensitivity
-
-                val change = (ratioChange * maxChange).toInt()
-
                 if (firstEvent.x.toInt() > viewCenterX) {
+                    val change = (ratioChange * volumeManager.maxStreamVolume).toInt()
                     volumeManager.adjustVolume(change)
                     activity.showVolumeGestureLayout()
                 } else {
-                    val brightnessChange = ratioChange * brightnessManager.maxBrightness
-                    brightnessManager.setBrightness(brightnessManager.currentBrightness + brightnessChange)
+                    val change = ratioChange * brightnessManager.maxBrightness
+                    brightnessManager.setBrightness(brightnessManager.currentBrightness + change)
                     activity.showBrightnessGestureLayout()
                 }
                 return true
